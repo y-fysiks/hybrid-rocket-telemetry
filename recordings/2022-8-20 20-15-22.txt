@@ -1,0 +1,13 @@
+MET: 00:00:00:056 | Thrust: 77.10 | Chamber Pres: 99.21 | Throttle: 0.00 | Total Impulse: 1.93
+MET: 00:00:00:119 | Thrust: 53.28 | Chamber Pres: 98.23 | Throttle: 0.00 | Total Impulse: 3.26
+MET: 00:00:00:183 | Thrust: 59.44 | Chamber Pres: 96.86 | Throttle: 0.00 | Total Impulse: 4.75
+MET: 00:00:00:244 | Thrust: 187.91 | Chamber Pres: 95.11 | Throttle: 0.00 | Total Impulse: 9.44
+MET: 00:00:00:304 | Thrust: 211.62 | Chamber Pres: 92.98 | Throttle: 0.00 | Total Impulse: 14.73
+MET: 00:00:00:372 | Thrust: 66.24 | Chamber Pres: 90.49 | Throttle: 0.00 | Total Impulse: 16.39
+MET: 00:00:00:435 | Thrust: 181.18 | Chamber Pres: 87.64 | Throttle: 0.00 | Total Impulse: 20.92
+MET: 00:00:00:498 | Thrust: 357.04 | Chamber Pres: 84.45 | Throttle: 0.00 | Total Impulse: 29.85
+MET: 00:00:00:558 | Thrust: 302.70 | Chamber Pres: 80.92 | Throttle: 0.00 | Total Impulse: 37.41
+MET: 00:00:00:614 | Thrust:  7.75 | Chamber Pres: 77.07 | Throttle: 0.00 | Total Impulse: 37.61
+MET: 00:00:00:676 | Thrust: 293.30 | Chamber Pres: 80.92 | Throttle: 0.00 | Total Impulse: 44.94
+MET: 00:00:00:736 | Thrust: 358.44 | Chamber Pres: 84.45 | Throttle: 0.00 | Total Impulse: 53.90
+MET: 00:00:00:795 | Thrust: 190.35 | Chamber Pres: 87.64 | Throttle: 0.00 | Total Impulse: 58.66
