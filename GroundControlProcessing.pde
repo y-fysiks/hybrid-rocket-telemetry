@@ -26,11 +26,11 @@ ControlP5 cp5;
 Serial serialPort; // Serial port object
 
 //graph stuff
-Graph chamberPresGraph = new Graph(0 + 128 + 20, 0 + 80 + 20, 960 - 40 - 200, 720 - 30 - 160, color(255));
-Graph thrustGraph = new Graph(0 + 128 + 20, 720 + 80 + 10, 960 - 40 - 200, 720 - 20 - 160, color(255));
-Graph impulseGraph = new Graph(0 + 128 + 20, 1420 + 80 + 10, 960 - 40 - 200, 720 - 20 - 160, color(255));
-Graph IspGraph = new Graph(0 + 128 + 20, 1200 + 80 + 10, 960 - 40 - 200, 480 - 20 - 160, color(255));
-Graph throttleGraph = new Graph(3200 + 128 + 20, 1200 + 80 + 10, 640 - 40 - 200, 480 - 20 - 160, color(255));
+Graph chamberPresGraph = new Graph(0 + 128 / 2 + 20 / 2, 0 + 80 / 2 + 20 / 2, 960 / 2 - 40 / 2 - 200 / 2, 720 / 2 - 30 / 2 - 160 / 2, color(255));
+Graph thrustGraph = new Graph(0 + 128 / 2 + 20 / 2, 720 / 2 + 80 / 2 + 10 / 2, 960 / 2 - 40 / 2 - 200 / 2, 720 / 2 - 20 / 2 - 160 / 2, color(255));
+Graph impulseGraph = new Graph(0 + 128 / 2 + 20 / 2, 1420 / 2 + 80 / 2 + 10 / 2, 960 / 2 - 40 / 2 - 200 / 2, 720 / 2 - 20 / 2 - 160 / 2, color(255));
+Graph IspGraph = new Graph(0 + 128 / 2 + 20 / 2, 1200 / 2 + 80 / 2 + 10 / 2, 960 / 2 - 40 / 2 - 200 / 2, 480 / 2 - 20 / 2 - 160 / 2, color(255));
+Graph throttleGraph = new Graph(3200 / 2 + 128 / 2 + 20 / 2, 1200 / 2 + 80 / 2 + 10 / 2, 640 / 2 - 40 / 2 - 200 / 2, 480 / 2 - 20 / 2 - 160 / 2, color(255));
 
 float[] thrustGraphValues = new float[255]; // 
 float[] pressureGraphValues = new float[255]; // 
@@ -126,26 +126,26 @@ void setup() {
     
     // The camera can be initialized directly using an 
     // element from the array returned by list():
-    cam = new Capture(this, 2240, 1680, cameras[0]);
+    cam = new Capture(this, 2240 / 2, 1680 / 2, cameras[0]);
     cam.start();
   }
   
-  arial48 = createFont("Arial", 48);
-  arialBold76 = createFont("Arial Bold", 76);
-  consolas42 = createFont("Consolas", 42);
+  arial48 = createFont("Arial", 48 / 2);
+  arialBold76 = createFont("Arial Bold", 76 / 2);
+  consolas42 = createFont("Consolas", 42 / 2);
   
   ControlFont buttonFont = new ControlFont(consolas42);
   cp5.addButton("reset")
      .setValue(0)
-     .setPosition(3280, 710 + 20)
-     .setSize(480, 80)
+     .setPosition(3280 / 2, 710 / 2 + 20 / 2)
+     .setSize(480 / 2, 80 / 2)
      .setFont(buttonFont)
      .updateSize()
      ;
   cp5.addButton("overrideRecord")
    .setValue(0)
-   .setPosition(3280, 820)
-   .setSize(480, 80)
+   .setPosition(3280 / 2, 820 / 2)
+   .setSize(480 / 2, 80 / 2)
    .setCaptionLabel("Override-start rec.")
    .setFont(buttonFont)
    .updateSize()
@@ -156,6 +156,7 @@ void setup() {
 byte[] inBuffer = new byte[100]; // holds serial message
 void draw() {
   STARTED = true;
+  
   //update clock
   now = OffsetTime.now(ZoneOffset.UTC);
   if (!FIRED) {
@@ -193,6 +194,7 @@ void draw() {
     String myString = "";
     if (!mockupData) {
       try {
+        inBuffer = new byte[100];
         serialPort.readBytesUntil('\r', inBuffer);
       }
       catch (Exception e) {
@@ -208,21 +210,32 @@ void draw() {
     // split the string at delimiter (space)
     String[] nums = split(myString, ' ');
     
+    print(nums.length);
+    
+    if (nums.length == 5) {
+    
     for (int i = 0; i < thrustGraphValues.length - 1; i++) {
       thrustGraphValues[i] = thrustGraphValues[i + 1];
     }
-    thrustGraphValues[thrustGraphValues.length - 1] = Math.max(Float.parseFloat(nums[0]), 0);
+    if (nums[0].length() != 0) {
+        thrustGraphValues[thrustGraphValues.length - 1] = Math.max(Float.parseFloat(nums[0]), 0);
+    }
     
     for (int i = 0; i < pressureGraphValues.length - 1; i++) {
       pressureGraphValues[i] = pressureGraphValues[i + 1];
     }
-    pressureGraphValues[pressureGraphValues.length - 1] = Float.parseFloat(nums[1]);
+    if (nums[1].length() != 0) {
+      pressureGraphValues[pressureGraphValues.length - 1] = Float.parseFloat(nums[1]);
+    }
     
     for (int i = 0; i < throttleGraphValues.length - 1; i++) {
       throttleGraphValues[i] = throttleGraphValues[i + 1];
     }
-    throttleGraphValues[throttleGraphValues.length - 1] = Float.parseFloat(nums[2]);
-        
+    if (nums[2].length() != 0) {
+      throttleGraphValues[throttleGraphValues.length - 1] = Float.parseFloat(nums[2]);
+    }
+    
+    
     //check if there is oxidizer flow by using throttle telemetry AND CREATE NEW FILE FOR RECORDING
     if (throttleGraphValues[throttleGraphValues.length - 1] > 0 && !FIRED) {
       FIRED = true;
@@ -232,7 +245,10 @@ void draw() {
     for (int i = 0; i < timestamps.length - 1; i++) {
       timestamps[i] = timestamps[i + 1];
     }
-    timestamps[timestamps.length - 1] = Float.parseFloat(nums[3]);
+    if (nums[3].length() != 0) {
+      timestamps[timestamps.length - 1] = Float.parseFloat(nums[3]);
+    }
+    }
     
     for (int i = timestamps.length - 1; i >= 0; i--) {
       timestampsGraph[i] = (timestamps[i] - timestamps[timestamps.length - 1]);
@@ -286,18 +302,18 @@ void draw() {
   //image(cam, 0, 0);
   // The following does the same, and is faster when just drawing the image
   // without any additional resizing, transformations, or tint.
-  set(960, 480, cam);
+  set(960 / 2, 480 / 2, cam);
   
   textAlign(CENTER);
   textFont(arialBold76);
-  text(title, 3520, 100);
+  text(title, 3520 / 2, 100 / 2);
   textFont(arial48);
-  text("Ground Control & Telemetry", 3520, 175);
+  text("Ground Control & Telemetry", 3520 / 2, 175 / 2);
   textFont(consolas42);
-  text("CLT: " + CLT + "\nUTC: " + UTC + "\nSOT: " + SOT + "\nMET: " + MET, 3520, 250);
+  text("CLT: " + CLT + "\nUTC: " + UTC + "\nSOT: " + SOT + "\nMET: " + MET, 3520 / 2, 250 / 2);
   
   fill(color(48)); stroke(200); strokeWeight(2);
-  rect(3200 + 20, 480 + 10, 640 - 40, 720 - 20, 20, 20, 20, 20);
+  rect(3200 / 2 + 20 / 2, 480 / 2 + 10 / 2, 640 / 2 - 40 / 2, 720 / 2 - 20 / 2, 20 / 2, 20 / 2, 20 / 2, 20 / 2);
   //decide on color and text of status indicators
   color statusColor = color(#619fe1); String statusText = "Pre-Launch Standby";
   color recordingColor = color(#619fe1); String recText = "Auto-record Standby";
@@ -317,21 +333,21 @@ void draw() {
   }
   
   strokeWeight(0); fill(statusColor);
-  rect(3200 + 20 + 10, 480 + 10 + 10, 640 - 40 - 20, 100, 20, 20, 20, 20);
+  rect(3200 / 2 + 20 / 2 + 10 / 2, 480 / 2 + 10 / 2 + 10 / 2, 640 / 2 - 40 / 2 - 20 / 2, 100 / 2, 20 / 2, 20 / 2, 20 / 2, 20 / 2);
   textFont(arial48); fill(0);
-  text(statusText, 3520, 565);
+  text(statusText, 3520 / 2, 565 / 2);
   fill(recordingColor);
-  rect(3200 + 20 + 10, 480 + 10 + 10 + 110, 640 - 40 - 20, 100, 20, 20, 20, 20);
+  rect(3200 / 2 + 20 / 2 + 10 / 2, 480 / 2 + 10 / 2 + 10 / 2 + 110 / 2, 640 / 2 - 40 / 2 - 20 / 2, 100 / 2, 20 / 2, 20 / 2, 20 / 2, 20 / 2);
   textFont(arial48); fill(0);
-  text(recText, 3520, 565 + 110);
+  text(recText, 3520 / 2, 565 / 2 + 110 / 2);
   textFont(consolas42); fill(200);
-  text("RESET", 3520, 770);
+  text("RESET", 3520 / 2, 770 / 2);
   
   
   fill(color(48)); stroke(200); strokeWeight(2);
-  rect(3200 + 20, 1680 + 10, 640 - 40, 480 - 30, 20, 20, 20, 20);
+  rect(3200 / 2 + 20 / 2, 1680 / 2 + 10 / 2, 640 / 2 - 40 / 2, 480 / 2 - 30 / 2, 20 / 2, 20 / 2, 20 / 2, 20 / 2);
   textFont(arial48); fill(200);
-  text("Raw telemetry", 3520, 1680 + 68);
+  text("Raw telemetry", 3520 / 2, 1680 / 2 + 68 / 2 / 2);
 }
 
 public void reset(int value) {
